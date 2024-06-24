@@ -1166,7 +1166,12 @@ class Wrapper:
         if operation == 0:
             dom.insert(position, DOMLevel(price, size, marketMaker))
         elif operation == 1:
-            dom[position] = DOMLevel(price, size, marketMaker)
+            if position < len(dom):
+                dom[position] = DOMLevel(price, size, marketMaker)
+            else:
+                self._logger.error(f"updateMktDepthL2 called with update operation with invalid position: {position}, size: {len(dom)}, reqId: {reqId}")
+                dom.insert(position, DOMLevel(price, size, marketMaker))
+
         elif operation == 2:
             if position < len(dom):
                 level = dom.pop(position)
