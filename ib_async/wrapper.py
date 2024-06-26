@@ -1161,6 +1161,10 @@ class Wrapper:
         # operation: 0 = insert, 1 = update, 2 = delete
         # side: 0 = ask, 1 = bid
         ticker = self.reqId2Ticker[reqId]
+        if ticker.mktDepthRequestCancelled:
+            # market depth was already cancelled, we should not receive more updates
+            # https://github.com/ib-api-reloaded/ib_async/issues/33
+            return
 
         dom = ticker.domBids if side else ticker.domAsks
         if operation == 0:

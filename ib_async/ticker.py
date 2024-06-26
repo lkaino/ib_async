@@ -121,6 +121,7 @@ class Ticker:
     regulatoryImbalance: float = nan
     bboExchange: str = ""
     snapshotPermissions: int = 0
+    mktDepthRequestCancelled: bool = False
 
     def __post_init__(self):
         self.updateEvent = TickerUpdateEvent("updateEvent")

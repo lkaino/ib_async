@@ -1479,6 +1479,7 @@ class IB:
         ticker = self.wrapper.startTicker(reqId, contract, "mktDepth")
         ticker.domBids.clear()
         ticker.domAsks.clear()
+        ticker.mktDepthRequestCancelled = False
         self.client.reqMktDepth(reqId, contract, numRows, isSmartDepth, mktDepthOptions)
         return ticker
 
@@ -1491,6 +1492,7 @@ class IB:
                 subscribe with.
         """
         ticker = self.ticker(contract)
+        ticker.mktDepthRequestCancelled = True
         reqId = self.wrapper.endTicker(ticker, "mktDepth") if ticker else 0
         if ticker and reqId:
             self.client.cancelMktDepth(reqId, isSmartDepth)
