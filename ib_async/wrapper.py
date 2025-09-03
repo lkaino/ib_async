@@ -106,6 +106,7 @@ PRICE_TICK_MAP: Final[TickDict] = {
 
 SIZE_TICK_MAP: Final[TickDict] = {
     8: "volume",
+    46: "shortable",
     74: "volume",
     63: "volumeRate3Min",
     64: "volumeRate5Min",
