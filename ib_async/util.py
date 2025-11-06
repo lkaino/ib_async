@@ -24,10 +24,7 @@ from typing import (
 
 import eventkit as ev
 
-try:
-    from zoneinfo import ZoneInfo
-except ImportError:
-    from backports.zoneinfo import ZoneInfo  # type: ignore
+from zoneinfo import ZoneInfo
 
 
 globalErrorEvent = ev.Event()
