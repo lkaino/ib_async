@@ -10,6 +10,7 @@ from ib_async.contract import Contract
 from ib_async.objects import (
     Dividends,
     DOMLevel,
+    EfpData,
     FundamentalRatios,
     IBDefaults,
     MktDepthData,
@@ -109,6 +110,28 @@ class Ticker:
     avOptionVolume: float = nan
     histVolatility: float = nan
     impliedVolatility: float = nan
+    openInterest: float = nan
+    lastRthTrade: float = nan
+    lastRegTime: str = ""
+    optionBidExch: str = ""
+    optionAskExch: str = ""
+    bondFactorMultiplier: float = nan
+    creditmanMarkPrice: float = nan
+    creditmanSlowMarkPrice: float = nan
+    delayedLastTimestamp: datetime | None = None
+    delayedHalted: float = nan
+    reutersMutualFunds: str = ""
+    etfNavClose: float = nan
+    etfNavPriorClose: float = nan
+    etfNavBid: float = nan
+    etfNavAsk: float = nan
+    etfNavLast: float = nan
+    etfFrozenNavLast: float = nan
+    etfNavHigh: float = nan
+    etfNavLow: float = nan
+    socialMarketAnalytics: str = ""
+    estimatedIpoMidpoint: float = nan
+    finalIpoLast: float = nan
     dividends: Optional[Dividends] = None
     fundamentalRatios: Optional[FundamentalRatios] = None
     ticks: list[TickData] = field(default_factory=list)
@@ -124,6 +147,14 @@ class Ticker:
     askGreeks: Optional[OptionComputation] = None
     lastGreeks: Optional[OptionComputation] = None
     modelGreeks: Optional[OptionComputation] = None
+    custGreeks: Optional[OptionComputation] = None
+    bidEfp: Optional[EfpData] = None
+    askEfp: Optional[EfpData] = None
+    lastEfp: Optional[EfpData] = None
+    openEfp: Optional[EfpData] = None
+    highEfp: Optional[EfpData] = None
+    lowEfp: Optional[EfpData] = None
+    closeEfp: Optional[EfpData] = None
     auctionVolume: float = nan
     auctionPrice: float = nan
     auctionImbalance: float = nan
@@ -195,6 +226,22 @@ class Ticker:
             self.auctionPrice = self.defaults.unset
             self.auctionImbalance = self.defaults.unset
             self.regulatoryImbalance = self.defaults.unset
+            self.openInterest = self.defaults.unset
+            self.lastRthTrade = self.defaults.unset
+            self.bondFactorMultiplier = self.defaults.unset
+            self.creditmanMarkPrice = self.defaults.unset
+            self.creditmanSlowMarkPrice = self.defaults.unset
+            self.delayedHalted = self.defaults.unset
+            self.etfNavClose = self.defaults.unset
+            self.etfNavPriorClose = self.defaults.unset
+            self.etfNavBid = self.defaults.unset
+            self.etfNavAsk = self.defaults.unset
+            self.etfNavLast = self.defaults.unset
+            self.etfFrozenNavLast = self.defaults.unset
+            self.etfNavHigh = self.defaults.unset
+            self.etfNavLow = self.defaults.unset
+            self.estimatedIpoMidpoint = self.defaults.unset
+            self.finalIpoLast = self.defaults.unset
 
             self.created = True
 

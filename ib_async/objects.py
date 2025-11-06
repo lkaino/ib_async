@@ -324,6 +324,37 @@ class Fill(NamedTuple):
 
 
 @dataclass(slots=True, frozen=True)
+class EfpData:
+    """
+    Exchange for Physical (EFP) futures data.
+
+    EFP allows trading a position in a single stock for a position
+    in the corresponding single stock future.
+    """
+
+    # Annualized basis points (financing rate comparable to broker rates)
+    basisPoints: float
+
+    # Basis points formatted as percentage string
+    formattedBasisPoints: str
+
+    # The implied Futures price
+    impliedFuture: float
+
+    # Number of days until the future's last trade date
+    holdDays: int
+
+    # Expiration date of the single stock future
+    futureLastTradeDate: str
+
+    # Dividend impact on the annualized basis points interest rate
+    dividendImpact: float
+
+    # Expected dividends until future expiration
+    dividendsToLastTradeDate: float
+
+
+@dataclass(slots=True, frozen=True)
 class OptionComputation:
     tickAttrib: int
     impliedVol: float | None = None
