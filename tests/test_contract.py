@@ -1,7 +1,7 @@
 import pandas as pd
 
 import ib_async
-from ib_async import *
+from ib_async import Stock, util
 
 
 def test_contract_format_data_pd():
