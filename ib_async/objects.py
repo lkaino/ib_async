@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from datetime import date as date_, datetime, timezone, tzinfo
-from typing import Any, List, NamedTuple, Optional, Union
+from datetime import date as date_
+from datetime import datetime, timezone, tzinfo
+from typing import Any, NamedTuple
 
 from eventkit import Event
 
@@ -95,7 +96,7 @@ class ExecutionFilter:
 
 @dataclass
 class BarData:
-    date: Union[date_, datetime] = EPOCH
+    date: date_ | datetime = EPOCH
     open: float = 0.0
     high: float = 0.0
     low: float = 0.0
@@ -199,7 +200,7 @@ class HistoricalSchedule:
     startDateTime: str = ""
     endDateTime: str = ""
     timeZone: str = ""
-    sessions: List[HistoricalSession] = field(default_factory=list)
+    sessions: list[HistoricalSession] = field(default_factory=list)
 
 
 @dataclass
@@ -397,7 +398,7 @@ class OptionComputation:
         )
 
     def __mul__(self, other: int | float) -> OptionComputation:
-        if not isinstance(other, (int, float)):
+        if not isinstance(other, int | float):
             raise TypeError(f"Cannot multiply {type(self)} and {type(other)}")
 
         return self.__class__(
@@ -418,16 +419,16 @@ class OptionChain:
     underlyingConId: int
     tradingClass: str
     multiplier: str
-    expirations: List[str]
-    strikes: List[float]
+    expirations: list[str]
+    strikes: list[float]
 
 
 @dataclass(slots=True, frozen=True)
 class Dividends:
-    past12Months: Optional[float]
-    next12Months: Optional[float]
-    nextDate: Optional[date_]
-    nextAmount: Optional[float]
+    past12Months: float | None
+    next12Months: float | None
+    nextDate: date_ | None
+    nextAmount: float | None
 
 
 @dataclass(slots=True, frozen=True)
@@ -484,7 +485,7 @@ class ConnectionStats:
     numMsgSent: int
 
 
-class BarDataList(List[BarData]):
+class BarDataList(list[BarData]):
     """
     List of :class:`.BarData` that also stores all request parameters.
 
@@ -496,14 +497,14 @@ class BarDataList(List[BarData]):
 
     reqId: int
     contract: Contract
-    endDateTime: Union[datetime, date_, str, None]
+    endDateTime: datetime | date_ | str | None
     durationStr: str
     barSizeSetting: str
     whatToShow: str
     useRTH: bool
     formatDate: int
     keepUpToDate: bool
-    chartOptions: List[TagValue]
+    chartOptions: list[TagValue]
 
     def __init__(self, *args):
         super().__init__(*args)
@@ -513,7 +514,7 @@ class BarDataList(List[BarData]):
         return self is other
 
 
-class RealTimeBarList(List[RealTimeBar]):
+class RealTimeBarList(list[RealTimeBar]):
     """
     List of :class:`.RealTimeBar` that also stores all request parameters.
 
@@ -528,7 +529,7 @@ class RealTimeBarList(List[RealTimeBar]):
     barSize: int
     whatToShow: str
     useRTH: bool
-    realTimeBarsOptions: List[TagValue]
+    realTimeBarsOptions: list[TagValue]
 
     def __init__(self, *args):
         super().__init__(*args)
@@ -538,7 +539,7 @@ class RealTimeBarList(List[RealTimeBar]):
         return self is other
 
 
-class ScanDataList(List[ScanData]):
+class ScanDataList(list[ScanData]):
     """
     List of :class:`.ScanData` that also stores all request parameters.
 
@@ -548,8 +549,8 @@ class ScanDataList(List[ScanData]):
 
     reqId: int
     subscription: ScannerSubscription
-    scannerSubscriptionOptions: List[TagValue]
-    scannerSubscriptionFilterOptions: List[TagValue]
+    scannerSubscriptionOptions: list[TagValue]
+    scannerSubscriptionFilterOptions: list[TagValue]
 
     def __init__(self, *args):
         super().__init__(*args)

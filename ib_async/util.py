@@ -2,30 +2,21 @@
 
 import asyncio
 import datetime as dt
-import functools
 import logging
 import math
 import signal
 import sys
 import time
+from collections.abc import AsyncIterator, Awaitable, Callable, Iterator
 from dataclasses import fields, is_dataclass
 from typing import (
     Any,
-    AsyncIterator,
-    Awaitable,
-    Callable,
     Final,
-    Iterator,
-    List,
-    Optional,
     TypeAlias,
-    Union,
 )
-
-import eventkit as ev
-
 from zoneinfo import ZoneInfo
 
+import eventkit as ev
 
 globalErrorEvent = ev.Event()
 """
@@ -39,7 +30,7 @@ UNSET_DOUBLE: Final = sys.float_info.max
 Time_t: TypeAlias = dt.time | dt.datetime
 
 
-def df(objs, labels: Optional[List[str]] = None):
+def df(objs, labels: list[str] | None = None):
     """
     Create pandas DataFrame from the sequence of same-type objects.
 
@@ -166,10 +157,10 @@ def tree(obj):
     Convert object to a tree of lists, dicts and simple values.
     The result can be serialized to JSON.
     """
-    if isinstance(obj, (bool, int, float, str, bytes)):
+    if isinstance(obj, bool | int | float | str | bytes):
         return obj
 
-    if isinstance(obj, (dt.date, dt.time)):
+    if isinstance(obj, dt.date | dt.time):
         return obj.isoformat()
 
     if isinstance(obj, dict):
@@ -178,7 +169,7 @@ def tree(obj):
     if isnamedtupleinstance(obj):
         return {f: tree(getattr(obj, f)) for f in obj._fields}
 
-    if isinstance(obj, (list, tuple, set)):
+    if isinstance(obj, list | tuple | set):
         return [tree(i) for i in obj]
 
     if is_dataclass(obj):
@@ -296,7 +287,7 @@ def formatSI(n: float) -> str:
         log = int(math.floor(math.log10(n)))
         i, j = divmod(log, 3)
         for _try in range(2):
-            templ = "%.{}f".format(2 - j)
+            templ = f"%.{2 - j}f"
             val = templ % (n * 10 ** (-3 * i))
             if val != "1000":
                 break
@@ -322,7 +313,7 @@ class timeit:
         print(self.title + " took " + formatSI(time.time() - self.t0) + "s")
 
 
-def run(*awaitables: Awaitable, timeout: Optional[float] = None):
+def run(*awaitables: Awaitable, timeout: float | None = None):
     """
     By default run the event loop forever.
 
@@ -340,10 +331,7 @@ def run(*awaitables: Awaitable, timeout: Optional[float] = None):
 
         loop.run_forever()
         result = None
-        if sys.version_info >= (3, 7):
-            all_tasks = asyncio.all_tasks(loop)  # type: ignore
-        else:
-            all_tasks = asyncio.Task.all_tasks()  # type: ignore
+        all_tasks = asyncio.all_tasks(loop)  # type: ignore
 
         if all_tasks:
             # cancel pending tasks
@@ -583,7 +571,7 @@ def useQt(qtLib: str = "PyQt5", period: float = 0.01):
     qt_step()
 
 
-def formatIBDatetime(t: Union[dt.date, dt.datetime, str, None]) -> str:
+def formatIBDatetime(t: dt.date | dt.datetime | str | None) -> str:
     """Format date or datetime to string that IB uses."""
     if not t:
         s = ""
@@ -602,7 +590,7 @@ def formatIBDatetime(t: Union[dt.date, dt.datetime, str, None]) -> str:
     return s
 
 
-def parseIBDatetime(s: str) -> Union[dt.date, dt.datetime]:
+def parseIBDatetime(s: str) -> dt.date | dt.datetime:
     """Parse string in IB date or datetime format to datetime."""
     if len(s) == 8:
         # YYYYmmdd

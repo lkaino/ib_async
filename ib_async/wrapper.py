@@ -3,12 +3,11 @@
 import asyncio
 import logging
 import time
-
 from collections import defaultdict
 from contextlib import suppress
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, cast, Final, Optional, TYPE_CHECKING, TypeAlias, Union
+from typing import TYPE_CHECKING, Any, Final, TypeAlias, cast
 
 from ib_async.contract import (
     Contract,
@@ -64,13 +63,13 @@ from ib_async.objects import (
 from ib_async.order import Order, OrderState, OrderStatus, Trade
 from ib_async.ticker import Ticker
 from ib_async.util import (
+    UNSET_DOUBLE,
+    UNSET_INTEGER,
     dataclassAsDict,
     dataclassUpdate,
     getLoop,
     globalErrorEvent,
     parseIBDatetime,
-    UNSET_DOUBLE,
-    UNSET_INTEGER,
 )
 
 if TYPE_CHECKING:
@@ -257,7 +256,7 @@ class Wrapper:
     reqId2Ticker: dict[int, Ticker] = field(init=False)
     """ reqId -> Ticker """
 
-    ticker2ReqId: dict[Union[int, str], dict[Ticker, int]] = field(init=False)
+    ticker2ReqId: dict[int | str, dict[Ticker, int]] = field(init=False)
     """ tickType -> Ticker -> reqId """
 
     reqId2Subscriber: dict[int, Any] = field(init=False)
@@ -400,7 +399,7 @@ class Wrapper:
                 else:
                     future.set_exception(result)
 
-    def startTicker(self, reqId: int, contract: Contract, tickType: Union[int, str]):
+    def startTicker(self, reqId: int, contract: Contract, tickType: int | str):
         """
         Start a tick request that has the reqId associated with the contract.
         Return the ticker.
@@ -415,7 +414,7 @@ class Wrapper:
         self.ticker2ReqId[tickType][ticker] = reqId
         return ticker
 
-    def endTicker(self, ticker: Ticker, tickType: Union[int, str]):
+    def endTicker(self, ticker: Ticker, tickType: int | str):
         reqId = self.ticker2ReqId[tickType].pop(ticker, 0)
         self._reqId2Contract.pop(reqId, None)
         return reqId
@@ -751,7 +750,7 @@ class Wrapper:
         key = self.orderKey(clientId, orderId, permId)
         trade = self.trades.get(key)
         if trade:
-            msg: Optional[str]
+            msg: str | None
             oldStatus = trade.orderStatus.status
             new = dict(
                 status=status,

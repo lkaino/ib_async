@@ -1,7 +1,7 @@
+import pandas as pd
+
 import ib_async
 from ib_async import *
-
-import pandas as pd
 
 
 def test_contract_format_data_pd():
@@ -50,4 +50,4 @@ def test_contract_format_data_pd():
 
     for symbol_str in symbols:
         symbol = Stock(symbol_str, "SMART", "USD")
-        df = get_OHLCV(symbol)
+        get_OHLCV(symbol)

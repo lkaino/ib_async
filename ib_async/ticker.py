@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import ClassVar, Optional, Union
+from typing import ClassVar
 
 from eventkit import Event, Op
 
@@ -91,7 +91,7 @@ class Ticker:
     rtHistVolatility: float = nan
     rtVolume: float = nan
     rtTradeVolume: float = nan
-    rtTime: Optional[datetime] = None
+    rtTime: datetime | None = None
     avVolume: float = nan
     tradeCount: float = nan
     tradeRate: float = nan
@@ -132,29 +132,29 @@ class Ticker:
     socialMarketAnalytics: str = ""
     estimatedIpoMidpoint: float = nan
     finalIpoLast: float = nan
-    dividends: Optional[Dividends] = None
-    fundamentalRatios: Optional[FundamentalRatios] = None
+    dividends: Dividends | None = None
+    fundamentalRatios: FundamentalRatios | None = None
     ticks: list[TickData] = field(default_factory=list)
-    tickByTicks: list[
-        Union[TickByTickAllLast, TickByTickBidAsk, TickByTickMidPoint]
-    ] = field(default_factory=list)
+    tickByTicks: list[TickByTickAllLast | TickByTickBidAsk | TickByTickMidPoint] = (
+        field(default_factory=list)
+    )
     domBids: list[DOMLevel] = field(default_factory=list)
     domBidsDict: dict[int, DOMLevel] = field(default_factory=dict)
     domAsks: list[DOMLevel] = field(default_factory=list)
     domAsksDict: dict[int, DOMLevel] = field(default_factory=dict)
     domTicks: list[MktDepthData] = field(default_factory=list)
-    bidGreeks: Optional[OptionComputation] = None
-    askGreeks: Optional[OptionComputation] = None
-    lastGreeks: Optional[OptionComputation] = None
-    modelGreeks: Optional[OptionComputation] = None
-    custGreeks: Optional[OptionComputation] = None
-    bidEfp: Optional[EfpData] = None
-    askEfp: Optional[EfpData] = None
-    lastEfp: Optional[EfpData] = None
-    openEfp: Optional[EfpData] = None
-    highEfp: Optional[EfpData] = None
-    lowEfp: Optional[EfpData] = None
-    closeEfp: Optional[EfpData] = None
+    bidGreeks: OptionComputation | None = None
+    askGreeks: OptionComputation | None = None
+    lastGreeks: OptionComputation | None = None
+    modelGreeks: OptionComputation | None = None
+    custGreeks: OptionComputation | None = None
+    bidEfp: EfpData | None = None
+    askEfp: EfpData | None = None
+    lastEfp: EfpData | None = None
+    openEfp: EfpData | None = None
+    highEfp: EfpData | None = None
+    lowEfp: EfpData | None = None
+    closeEfp: EfpData | None = None
     auctionVolume: float = nan
     auctionPrice: float = nan
     auctionImbalance: float = nan
@@ -385,7 +385,7 @@ class Midpoints(Tickfilter):
 
 @dataclass
 class Bar:
-    time: Optional[datetime]
+    time: datetime | None
     open: float = nan
     high: float = nan
     low: float = nan

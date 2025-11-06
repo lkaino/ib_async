@@ -64,3 +64,15 @@ asyncio_mode="auto"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+target-version = "py310"
+
+[tool.ruff.lint]
+extend-select = [
+  # convert legacy python syntax to modern syntax
+  "UP",
+  # isort imports
+  "I",
+]
+ignore = ["E402"] # Ignore Module level import not at top of file
