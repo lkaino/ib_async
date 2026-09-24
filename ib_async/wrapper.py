@@ -1551,6 +1551,8 @@ class Wrapper:
             # Record warnings into the trade object, but unlike the _error_ case,
             # DO NOT delete the trade object because the order is STILL LIVE at the broker.
             if trade:
+                # 10349 reports a TIF change from an order preset, not a rejection.
+                # Preserve the live status so callers do not submit a duplicate order.
                 status = trade.orderStatus.status if errorCode == 10349 else OrderStatus.ValidationError
                 if errorCode != 10349:
                     trade.orderStatus.status = status
