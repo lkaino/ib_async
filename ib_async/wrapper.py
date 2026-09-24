@@ -1526,7 +1526,7 @@ class Wrapper:
         # Previously this was included as a Warning condition, but 202 is literally "Order Canceled" error status, so now it is an order-delete error:
         # 202 - Order cancelled - Reason:
 
-        warningCodes = frozenset({105, 110, 165, 321, 329, 399, 404, 434, 492, 10167})
+        warningCodes = frozenset({105, 110, 165, 321, 329, 399, 404, 434, 492, 10349, 10167})
         isWarning = errorCode in warningCodes or 2100 <= errorCode < 2200
 
         if errorCode == 110 and isRequest:
@@ -1551,7 +1551,9 @@ class Wrapper:
             # Record warnings into the trade object, but unlike the _error_ case,
             # DO NOT delete the trade object because the order is STILL LIVE at the broker.
             if trade:
-                status = trade.orderStatus.status = OrderStatus.ValidationError
+                status = trade.orderStatus.status if errorCode == 10349 else OrderStatus.ValidationError
+                if errorCode != 10349:
+                    trade.orderStatus.status = status
                 logEntry = TradeLogEntry(self.lastTime, status, msg, errorCode)
                 trade.log.append(logEntry)
                 self._logger.warning(f"IBKR API validation warning: {trade}")
